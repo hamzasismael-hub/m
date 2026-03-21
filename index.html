@@ -561,6 +561,7 @@ footer {
 <script>
 const LETTERS = ['أ','ب','ج','د'];
 
+// correct = index of the correct option (0-based)
 const DATA = {
   1: {
     title: '🌟 مسابقة العلوم العامة',
@@ -570,16 +571,24 @@ const DATA = {
         label: 'النموذج الأول — العلوم العامة',
         sub: 'العلوم العامة • نموذج أ',
         questions: [
-          { text: 'ما هو أكبر كوكب في المجموعة الشمسية؟', options: ['كوكب المشتري','كوكب زحل','كوكب الأرض'] },
-          { text: 'ما هو العنصر الكيميائي الأكثر وفرةً في الغلاف الجوي للأرض؟', options: ['النيتروجين','الأكسجين','ثاني أكسيد الكربون'] }
+          // الصحيح: المشتري → موضع 0
+          { text: 'ما هو أكبر كوكب في المجموعة الشمسية؟',
+            options: ['كوكب زحل','كوكب المشتري','كوكب الأرض'], correct: 1 },
+          // الصحيح: النيتروجين → موضع 2
+          { text: 'ما هو العنصر الكيميائي الأكثر وفرةً في الغلاف الجوي للأرض؟',
+            options: ['الأكسجين','ثاني أكسيد الكربون','النيتروجين'], correct: 2 }
         ]
       },
       2: {
         label: 'النموذج الثاني — العلوم العامة',
         sub: 'العلوم العامة • نموذج ب',
         questions: [
-          { text: 'كم تبلغ سرعة الضوء تقريباً في الفراغ؟', options: ['300,000 كم/ثانية','150,000 كم/ثانية','500,000 كم/ثانية'] },
-          { text: 'ما هو الرمز الكيميائي للذهب؟', options: ['Au','Ag','Fe'] }
+          // الصحيح: 300,000 → موضع 1
+          { text: 'كم تبلغ سرعة الضوء تقريباً في الفراغ؟',
+            options: ['150,000 كم/ثانية','300,000 كم/ثانية','500,000 كم/ثانية'], correct: 1 },
+          // الصحيح: Au → موضع 2
+          { text: 'ما هو الرمز الكيميائي للذهب؟',
+            options: ['Ag','Fe','Au'], correct: 2 }
         ]
       }
     }
@@ -592,16 +601,24 @@ const DATA = {
         label: 'النموذج الأول — الثقافة واللغة',
         sub: 'الثقافة واللغة • نموذج أ',
         questions: [
-          { text: 'من هو مؤلف رواية «ألف شمس مشرقة»؟', options: ['خالد الحسيني','غابرييل غارسيا ماركيز','نجيب محفوظ'] },
-          { text: 'ما هي اللغة الأكثر تحدثاً في العالم من حيث عدد الناطقين بها لغةً أمٍّ؟', options: ['اللغة الصينية (الماندرين)','اللغة الإنجليزية','اللغة الإسبانية'] }
+          // الصحيح: خالد الحسيني → موضع 2
+          { text: 'من هو مؤلف رواية «ألف شمس مشرقة»؟',
+            options: ['غابرييل غارسيا ماركيز','نجيب محفوظ','خالد الحسيني'], correct: 2 },
+          // الصحيح: الصينية → موضع 0
+          { text: 'ما هي اللغة الأكثر تحدثاً في العالم من حيث عدد الناطقين بها لغةً أمٍّ؟',
+            options: ['اللغة الصينية (الماندرين)','اللغة الإنجليزية','اللغة الإسبانية'], correct: 0 }
         ]
       },
       2: {
         label: 'النموذج الثاني — الثقافة واللغة',
         sub: 'الثقافة واللغة • نموذج ب',
         questions: [
-          { text: 'في أيِّ عام تأسست منظمة الأمم المتحدة؟', options: ['عام 1945','عام 1919','عام 1952'] },
-          { text: 'ما هو أطول نهر في العالم؟', options: ['نهر النيل','نهر الأمازون','نهر المسيسيبي'] }
+          // الصحيح: 1945 → موضع 1
+          { text: 'في أيِّ عام تأسست منظمة الأمم المتحدة؟',
+            options: ['عام 1919','عام 1945','عام 1952'], correct: 1 },
+          // الصحيح: النيل → موضع 2
+          { text: 'ما هو أطول نهر في العالم؟',
+            options: ['نهر الأمازون','نهر المسيسيبي','نهر النيل'], correct: 2 }
         ]
       }
     }
@@ -672,7 +689,7 @@ function renderQuestions(qs) {
     card.id = 'qcard-'+qi;
     let opts = '';
     q.options.forEach((o, oi) => {
-      opts += `<div class="option" id="opt-${qi}-${oi}" onclick="pick(${qi},${oi},${oi===0})">
+      opts += `<div class="option" id="opt-${qi}-${oi}" onclick="pick(${qi},${oi},${oi===q.correct})">
         <div class="opt-letter">${LETTERS[oi]}</div>
         <div class="opt-label">${o}</div>
         <div class="opt-radio"><div class="opt-dot"></div></div>
@@ -695,7 +712,7 @@ function pick(qi, oi, isCorrect) {
   const total = form.questions[qi].options.length;
   for (let i=0; i<total; i++) document.getElementById('opt-'+qi+'-'+i).classList.remove('selected');
   document.getElementById('opt-'+qi+'-'+oi).classList.add('selected');
-  selections[qi] = isCorrect;
+  selections[qi] = { chosen: oi, correct: isCorrect };
   document.getElementById('qcard-'+qi).classList.add('answered');
   updateProgress();
 }
@@ -715,17 +732,18 @@ function checkAnswers() {
   form.questions.forEach((q, qi) => {
     const total = q.options.length;
     const fb    = document.getElementById('qfb-'+qi);
-    const isCor = selections[qi];
+    const isCor = selections[qi] ? selections[qi].correct : undefined;
     for (let oi=0; oi<total; oi++) {
       const el = document.getElementById('opt-'+qi+'-'+oi);
-      if (oi===0) { el.classList.add('correct'); }
+      if (oi===q.correct) { el.classList.add('correct'); }
       else if (el.classList.contains('selected')) { el.classList.add('wrong'); }
       else { el.classList.add('dim'); }
       el.classList.remove('selected');
     }
+    const correctLabel = LETTERS[q.correct];
     if (isCor===true)  { correct++; fb.className='q-feedback ok show';  fb.textContent='✓ إجابة صحيحة! أحسنت.'; }
-    else if(isCor===false){ fb.className='q-feedback bad show'; fb.textContent='✗ إجابة خاطئة. الإجابة الصحيحة هي الخيار الأول.'; }
-    else { fb.className='q-feedback bad show'; fb.textContent='⚠ لم تختر إجابة. الإجابة الصحيحة هي الخيار الأول.'; }
+    else if(isCor===false){ fb.className='q-feedback bad show'; fb.textContent=`✗ إجابة خاطئة. الإجابة الصحيحة هي الخيار (${correctLabel}).`; }
+    else { fb.className='q-feedback bad show'; fb.textContent=`⚠ لم تختر إجابة. الإجابة الصحيحة هي الخيار (${correctLabel}).`; }
   });
   const total = form.questions.length;
   document.getElementById('quiz-prog-bar').style.width = '100%';
