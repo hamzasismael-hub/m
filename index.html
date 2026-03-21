@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منصة المسابقات</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple-deep:  #1a0035;
+  --purple-main:  #6a0dad;
+  --purple-mid:   #8b24d4;
+  --purple-light: #b36aee;
+  --purple-pale:  #e8d5ff;
+  --gold:         #f5c842;
+  --white:        #ffffff;
+  --text-soft:    #d8c0ff;
+  --bg-dark:      #0a001f;
+  --card-bg:      rgba(255,255,255,0.04);
+  --card-border:  rgba(180,120,255,0.2);
+  --green:        #4ade80;
+  --red:          #f87171;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Cairo', sans-serif;
+  background: var(--bg-dark);
+  color: var(--white);
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(107,13,173,0.5) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 90% 80%, rgba(90,0,160,0.3) 0%, transparent 60%);
+}
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg, rgba(26,0,53,0.98), rgba(106,13,173,0.85), rgba(26,0,53,0.98));
+  border-bottom: 2px solid rgba(139,36,212,0.6);
+  box-shadow: 0 4px 40px rgba(139,36,212,0.4);
+  padding: 0 2rem;
+  position: sticky; top: 0; z-index: 100;
+}
+.header-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: auto 1fr auto;
+  align-items: center; gap: 2rem; padding: 1rem 0;
+}
+.logo-box { display: flex; align-items: center; gap: 0.8rem; text-decoration: none; cursor: pointer; }
+.logo-icon {
+  width: 52px; height: 52px;
+  background: linear-gradient(135deg, var(--purple-mid), var(--gold));
+  border-radius: 14px; display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; box-shadow: 0 0 20px rgba(139,36,212,0.6);
+}
+.logo-title { font-family: 'Tajawal',sans-serif; font-size: 1.2rem; font-weight: 800; }
+.logo-sub { font-size: 0.7rem; color: var(--purple-pale); opacity: 0.7; }
+.header-center { text-align: center; }
+.site-title {
+  font-family: 'Tajawal',sans-serif; font-size: 1.6rem; font-weight: 900;
+  background: linear-gradient(90deg,#fff,var(--gold),var(--purple-pale));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.site-tagline { font-size: 0.74rem; color: var(--text-soft); margin-top: 2px; }
+.header-meta {
+  display: flex; flex-direction: column; gap: 0.3rem;
+  border-right: 2px solid rgba(180,120,255,0.25); padding-right: 1.2rem;
+}
+.meta-row { display: flex; gap: 0.4rem; font-size: 0.75rem; color: var(--text-soft); align-items: center; }
+.meta-label { color: var(--purple-light); font-weight: 600; }
+.meta-empty { color: rgba(200,160,255,0.35); font-style: italic; font-size: 0.7rem; }
+
+/* BREADCRUMB */
+.breadcrumb {
+  background: rgba(10,0,30,0.75);
+  border-bottom: 1px solid rgba(139,36,212,0.2);
+  padding: 0.6rem 2rem; backdrop-filter: blur(8px);
+}
+.breadcrumb-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.8rem; color: var(--text-soft);
+}
+.bc-item { cursor: pointer; transition: color 0.2s; }
+.bc-item:hover { color: var(--purple-light); }
+.bc-item.active { color: var(--gold); font-weight: 600; }
+.bc-sep { color: rgba(180,120,255,0.4); }
+
+/* PAGES */
+.page { display: none; animation: fadeUp 0.4s ease both; }
+.page.active { display: block; }
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(18px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* HERO */
+.hero { padding: 4rem 2rem 3rem; text-align: center; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: rgba(139,36,212,0.18); border: 1px solid rgba(180,120,255,0.35);
+  border-radius: 50px; padding: 0.35rem 1.2rem;
+  font-size: 0.76rem; color: var(--purple-pale);
+  margin-bottom: 1.4rem; letter-spacing: 0.08em;
+}
+.hero h1 {
+  font-family: 'Tajawal',sans-serif;
+  font-size: clamp(2rem,4.5vw,3.2rem); font-weight: 900;
+  line-height: 1.2; margin-bottom: 0.8rem;
+}
+.hero h1 span {
+  background: linear-gradient(135deg,var(--purple-light),var(--gold));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-desc { font-size: 0.95rem; color: var(--text-soft); max-width: 500px; margin: 0 auto 2.5rem; line-height: 1.7; }
+.hero-stats { display: inline-flex; gap: 3rem; }
+.stat { text-align: center; }
+.stat-num { font-family: 'Tajawal',sans-serif; font-size: 2.2rem; font-weight: 900; color: var(--gold); display: block; line-height: 1; }
+.stat-lbl { font-size: 0.73rem; color: var(--text-soft); }
+
+/* MAIN */
+main { max-width: 1100px; margin: 0 auto; padding: 0 2rem 5rem; }
+
+/* SECTION LABEL */
+.section-label { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+.section-label h2 { font-family: 'Tajawal',sans-serif; font-size: 1.5rem; font-weight: 800; }
+.section-label .line { flex:1; height:1px; background: linear-gradient(90deg,rgba(139,36,212,0.5),transparent); }
+.section-label .badge { background:var(--purple-main); color:var(--gold); font-size:0.75rem; font-weight:700; padding:0.2rem 0.7rem; border-radius:50px; }
+
+/* PAGE HERO (inner pages) */
+.page-hero { padding: 3rem 2rem 2rem; text-align: center; }
+.page-hero h2 { font-family:'Tajawal',sans-serif; font-size:2rem; font-weight:900; margin-bottom:0.5rem; }
+.page-hero p { font-size:0.9rem; color:var(--text-soft); }
+
+/* COMPETITION CARDS */
+.competitions-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem; }
+@media(max-width:680px){ .competitions-grid,.forms-grid{grid-template-columns:1fr;} .header-inner{grid-template-columns:auto 1fr;} .header-meta{display:none;} }
+
+.comp-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: 24px; overflow: hidden; cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+  position: relative;
+}
+.comp-card:hover { transform:translateY(-6px); border-color:rgba(180,120,255,0.5); box-shadow:0 16px 50px rgba(106,13,173,0.35); }
+.comp-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background: linear-gradient(90deg,var(--purple-mid),var(--gold),var(--purple-mid));
+  opacity:0; transition:opacity 0.3s;
+}
+.comp-card:hover::before { opacity:1; }
+.comp-card-img {
+  height:160px;
+  background: linear-gradient(135deg,rgba(106,13,173,0.6),rgba(45,0,87,0.9));
+  display:flex; align-items:center; justify-content:center; font-size:4rem;
+}
+.comp-card-body { padding:1.6rem; }
+.comp-card-tag {
+  display:inline-block; background:rgba(139,36,212,0.2); border:1px solid rgba(180,120,255,0.3);
+  border-radius:50px; padding:0.2rem 0.8rem; font-size:0.7rem; color:var(--purple-pale); margin-bottom:0.8rem;
+}
+.comp-card-title { font-family:'Tajawal',sans-serif; font-size:1.3rem; font-weight:800; margin-bottom:0.5rem; }
+.comp-card-desc { font-size:0.82rem; color:var(--text-soft); line-height:1.6; margin-bottom:1.2rem; }
+.comp-card-meta { display:flex; gap:1rem; flex-wrap:wrap; border-top:1px solid rgba(180,120,255,0.15); padding-top:1rem; }
+.comp-meta-item { font-size:0.75rem; color:var(--purple-light); }
+.comp-card-btn {
+  display:flex; align-items:center; justify-content:center; gap:0.6rem;
+  width:100%; padding:0.8rem;
+  background: linear-gradient(135deg,var(--purple-mid),var(--purple-main));
+  border:none; border-radius:12px; color:var(--white); font-family:'Cairo',sans-serif;
+  font-size:0.9rem; font-weight:700; cursor:pointer; margin-top:1rem;
+  transition:all 0.25s; box-shadow:0 4px 16px rgba(139,36,212,0.4);
+}
+.comp-card-btn:hover { box-shadow:0 8px 25px rgba(139,36,212,0.6); transform:translateY(-1px); }
+
+/* FORM CARDS */
+.forms-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem; }
+.form-card {
+  background:var(--card-bg); border:1px solid var(--card-border);
+  border-radius:20px; overflow:hidden; cursor:pointer;
+  transition:transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+.form-card:hover { transform:translateY(-5px); border-color:rgba(180,120,255,0.5); box-shadow:0 14px 40px rgba(106,13,173,0.3); }
+.form-card-top {
+  background: linear-gradient(135deg,rgba(106,13,173,0.5),rgba(45,0,87,0.8));
+  padding:2.5rem 1.5rem; text-align:center;
+  border-bottom:1px solid rgba(180,120,255,0.2); position:relative; overflow:hidden;
+}
+.form-card-top::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(245,200,66,0.5),transparent);
+}
+.form-num-big {
+  width:70px; height:70px;
+  background:linear-gradient(135deg,var(--purple-mid),var(--purple-deep));
+  border-radius:18px; margin:0 auto 1rem;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Tajawal',sans-serif; font-size:1.8rem; font-weight:900; color:var(--gold);
+  border:2px solid rgba(180,120,255,0.3); box-shadow:0 6px 24px rgba(139,36,212,0.5);
+}
+.form-card-top h3 { font-family:'Tajawal',sans-serif; font-size:1.2rem; font-weight:800; }
+.form-card-top p { font-size:0.78rem; color:var(--purple-pale); margin-top:0.3rem; }
+.form-card-body { padding:1.4rem; }
+.form-card-info { display:flex; flex-direction:column; gap:0.6rem; margin-bottom:1.2rem; }
+.form-info-row { display:flex; align-items:center; justify-content:space-between; font-size:0.8rem; }
+.form-info-label { color:var(--text-soft); }
+.form-info-val {
+  background:rgba(139,36,212,0.2); border:1px solid rgba(180,120,255,0.25);
+  border-radius:6px; padding:0.15rem 0.6rem; color:var(--purple-pale); font-weight:600;
+}
+.form-start-btn {
+  display:flex; align-items:center; justify-content:center; gap:0.6rem;
+  width:100%; padding:0.9rem;
+  background:linear-gradient(135deg,var(--purple-mid),var(--purple-main));
+  border:none; border-radius:12px; color:var(--white); font-family:'Cairo',sans-serif;
+  font-size:0.9rem; font-weight:700; cursor:pointer;
+  transition:all 0.25s; box-shadow:0 4px 16px rgba(139,36,212,0.4);
+}
+.form-start-btn:hover { box-shadow:0 8px 25px rgba(139,36,212,0.6); }
+
+/* QUIZ PAGE */
+.quiz-container { max-width:700px; margin:0 auto; padding:2rem; }
+.quiz-header {
+  background:linear-gradient(135deg,rgba(106,13,173,0.5),rgba(45,0,87,0.8));
+  border:1px solid rgba(180,120,255,0.25);
+  border-radius:18px; padding:1.6rem; margin-bottom:2rem;
+  display:flex; align-items:center; gap:1.2rem;
+}
+.quiz-icon { width:56px; height:56px; background:linear-gradient(135deg,var(--purple-mid),var(--gold)); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.6rem; flex-shrink:0; }
+.quiz-info h3 { font-family:'Tajawal',sans-serif; font-size:1.2rem; font-weight:800; }
+.quiz-info p { font-size:0.78rem; color:var(--text-soft); margin-top:0.2rem; }
+.quiz-progress-wrap { flex:1; display:flex; flex-direction:column; gap:0.4rem; align-items:flex-end; }
+.quiz-prog-text { font-size:0.75rem; color:var(--purple-light); }
+.quiz-prog-bg { width:120px; height:6px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden; }
+.quiz-prog-bar { height:100%; background:linear-gradient(90deg,var(--purple-light),var(--gold)); border-radius:4px; width:0%; transition:width 0.5s ease; }
+
+/* QUESTION CARD */
+.question-card {
+  background:var(--card-bg); border:1px solid var(--card-border);
+  border-radius:18px; margin-bottom:1.5rem; overflow:hidden; transition:border-color 0.3s;
+}
+.question-card.answered { border-color:rgba(180,120,255,0.4); }
+.question-top {
+  padding:1.2rem 1.5rem; border-bottom:1px solid rgba(180,120,255,0.12);
+  display:flex; gap:0.8rem; align-items:flex-start;
+}
+.q-badge {
+  width:30px; height:30px;
+  background:linear-gradient(135deg,var(--purple-mid),var(--purple-deep));
+  border-radius:8px; display:flex; align-items:center; justify-content:center;
+  font-size:0.75rem; font-weight:700; color:var(--gold); flex-shrink:0; margin-top:1px;
+}
+.q-text-main { font-size:0.95rem; font-weight:600; color:var(--white); line-height:1.55; }
+.options-list { padding:1.2rem 1.5rem; display:flex; flex-direction:column; gap:0.7rem; }
+
+.option {
+  display:flex; align-items:center; gap:0.9rem;
+  padding:0.8rem 1.1rem; border-radius:12px;
+  border:1.5px solid rgba(180,120,255,0.15);
+  background:rgba(255,255,255,0.03);
+  cursor:pointer; transition:all 0.22s ease; user-select:none;
+}
+.option:hover { border-color:rgba(180,120,255,0.4); background:rgba(139,36,212,0.1); }
+.opt-letter {
+  width:28px; height:28px; background:rgba(139,36,212,0.2); border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.78rem; font-weight:700; color:var(--purple-light); flex-shrink:0; transition:all 0.2s;
+}
+.opt-label { font-size:0.88rem; color:var(--text-soft); flex:1; line-height:1.4; transition:color 0.2s; }
+.opt-radio {
+  width:20px; height:20px; border-radius:50%;
+  border:2px solid rgba(180,120,255,0.35);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all 0.2s;
+}
+.opt-dot { width:10px; height:10px; border-radius:50%; background:var(--purple-mid); transform:scale(0); transition:transform 0.2s; }
+
+.option.selected { border-color:var(--purple-mid)!important; background:rgba(139,36,212,0.18)!important; }
+.option.selected .opt-radio { border-color:var(--purple-mid); }
+.option.selected .opt-dot { transform:scale(1); }
+.option.selected .opt-label { color:var(--white); font-weight:600; }
+.option.selected .opt-letter { background:var(--purple-mid); color:var(--white); }
+
+.option.correct { border-color:var(--green)!important; background:rgba(74,222,128,0.08)!important; pointer-events:none; }
+.option.correct .opt-radio { border-color:var(--green); }
+.option.correct .opt-dot { background:var(--green); transform:scale(1); }
+.option.correct .opt-label { color:var(--green); font-weight:600; }
+.option.correct .opt-letter { background:rgba(74,222,128,0.2); color:var(--green); }
+
+.option.wrong { border-color:var(--red)!important; background:rgba(248,113,113,0.06)!important; opacity:0.6; pointer-events:none; }
+.option.wrong .opt-radio { border-color:var(--red); }
+.option.wrong .opt-dot { background:var(--red); transform:scale(1); }
+.option.wrong .opt-label { color:var(--red); }
+.option.wrong .opt-letter { background:rgba(248,113,113,0.15); color:var(--red); }
+.option.dim { opacity:0.4; pointer-events:none; }
+
+.q-feedback {
+  margin:0 1.5rem 1.2rem; padding:0.7rem 1rem;
+  border-radius:10px; font-size:0.82rem; font-weight:600;
+  display:none; align-items:center; gap:0.5rem;
+}
+.q-feedback.show { display:flex; }
+.q-feedback.ok  { background:rgba(74,222,128,0.1);  color:var(--green); border:1px solid rgba(74,222,128,0.25); }
+.q-feedback.bad { background:rgba(248,113,113,0.08); color:var(--red);   border:1px solid rgba(248,113,113,0.2); }
+
+/* BUTTONS */
+.quiz-actions { display:flex; gap:1rem; flex-wrap:wrap; margin-top:0.5rem; align-items:center; }
+.btn-primary {
+  display:inline-flex; align-items:center; gap:0.5rem;
+  padding:0.8rem 1.8rem;
+  background:linear-gradient(135deg,var(--purple-mid),var(--purple-main));
+  color:var(--white); border:none; border-radius:12px;
+  font-family:'Cairo',sans-serif; font-size:0.9rem; font-weight:700;
+  cursor:pointer; transition:all 0.25s; box-shadow:0 4px 18px rgba(139,36,212,0.45);
+}
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(139,36,212,0.6); }
+.btn-primary:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+.btn-secondary {
+  display:inline-flex; align-items:center; gap:0.5rem;
+  padding:0.8rem 1.4rem; background:transparent; color:var(--text-soft);
+  border:1px solid rgba(180,120,255,0.25); border-radius:12px;
+  font-family:'Cairo',sans-serif; font-size:0.85rem; font-weight:600;
+  cursor:pointer; transition:all 0.2s;
+}
+.btn-secondary:hover { border-color:rgba(180,120,255,0.5); color:var(--white); }
+.btn-gold {
+  display:inline-flex; align-items:center; gap:0.5rem;
+  padding:0.8rem 1.6rem;
+  background:linear-gradient(135deg,var(--gold),#d4a012);
+  color:var(--purple-deep); border:none; border-radius:12px;
+  font-family:'Cairo',sans-serif; font-size:0.9rem; font-weight:800;
+  cursor:pointer; transition:all 0.25s; box-shadow:0 4px 18px rgba(245,200,66,0.35);
+}
+.btn-gold:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(245,200,66,0.5); }
+
+/* RESULT */
+.result-box {
+  display:none;
+  background:linear-gradient(135deg,rgba(106,13,173,0.3),rgba(45,0,87,0.5));
+  border:1px solid rgba(180,120,255,0.3);
+  border-radius:18px; padding:2rem; text-align:center; margin-top:2rem;
+}
+.result-box.show { display:block; animation:fadeUp 0.4s ease both; }
+.result-emoji { font-size:3rem; margin-bottom:0.8rem; }
+.result-title { font-family:'Tajawal',sans-serif; font-size:1.5rem; font-weight:900; color:var(--gold); margin-bottom:0.4rem; }
+.result-score { font-size:1rem; color:var(--text-soft); margin-bottom:1.5rem; }
+.result-score span { color:var(--gold); font-weight:800; font-size:1.2rem; }
+
+/* FOOTER */
+footer {
+  background:rgba(10,0,30,0.95); border-top:1px solid rgba(139,36,212,0.25);
+  padding:2rem; text-align:center;
+}
+.footer-inner {
+  max-width:1100px; margin:0 auto;
+  display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:2rem;
+}
+.footer-links { display:flex; gap:1.5rem; flex-wrap:wrap; }
+.footer-links a { font-size:0.78rem; color:var(--text-soft); text-decoration:none; transition:color 0.2s; }
+.footer-links a:hover { color:var(--purple-light); }
+.footer-logo { display:flex; flex-direction:column; align-items:center; gap:0.4rem; }
+.footer-logo-icon {
+  width:38px; height:38px;
+  background:linear-gradient(135deg,var(--purple-mid),var(--gold));
+  border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1rem; opacity:0.6;
+}
+.footer-copy { font-size:0.7rem; color:rgba(200,160,255,0.35); }
+.footer-info { display:flex; flex-direction:column; align-items:flex-end; gap:0.25rem; }
+.footer-info span { font-size:0.72rem; color:rgba(200,160,255,0.4); }
+
+/* ORBS */
+.orb { position:fixed; border-radius:50%; filter:blur(90px); pointer-events:none; z-index:-1; animation:floatOrb 9s ease-in-out infinite; }
+.orb-1 { width:450px; height:450px; background:rgba(106,13,173,0.14); top:-100px; right:-80px; }
+.orb-2 { width:320px; height:320px; background:rgba(60,0,120,0.12); bottom:5%; left:-60px; animation-delay:-5s; }
+@keyframes floatOrb { 0%,100%{transform:translateY(0) scale(1);} 50%{transform:translateY(-18px) scale(1.04);} }
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo-box" onclick="goHome()">
+      <div class="logo-icon">🏆</div>
+      <div>
+        <div class="logo-title">منصة المسابقات</div>
+        <div class="logo-sub">QUIZ PLATFORM PRO</div>
+      </div>
+    </div>
+    <div class="header-center">
+      <div class="site-title">مركز التقييم والمسابقات</div>
+      <div class="site-tagline">اختبر معلوماتك وتحدَّ نفسك</div>
+    </div>
+    <div class="header-meta">
+      <div class="meta-row"><span class="meta-label">الجهة:</span><span class="meta-empty">——</span></div>
+      <div class="meta-row"><span class="meta-label">المرحلة:</span><span class="meta-empty">——</span></div>
+      <div class="meta-row"><span class="meta-label">التاريخ:</span><span class="meta-empty">——</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <div class="breadcrumb-inner" id="breadcrumb">
+    <span class="bc-item active" onclick="goHome()">🏠 الرئيسية</span>
+  </div>
+</div>
+
+<!-- PAGE: HOME -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-badge">✦ اضغط على مسابقة للبدء ✦</div>
+    <h1>اختر مسابقتك<br><span>وابدأ التحدي الآن</span></h1>
+    <p class="hero-desc">اضغط على إحدى المسابقتين لعرض النماذج، ثم اختر النموذج المطلوب وابدأ الإجابة.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">2</span><span class="stat-lbl">مسابقة</span></div>
+      <div class="stat"><span class="stat-num">4</span><span class="stat-lbl">نموذج</span></div>
+      <div class="stat"><span class="stat-num">8</span><span class="stat-lbl">سؤال</span></div>
+    </div>
+  </div>
+  <main>
+    <div class="section-label">
+      <h2>المسابقات المتاحة</h2>
+      <div class="line"></div>
+      <div class="badge">2 مسابقات</div>
+    </div>
+    <div class="competitions-grid">
+      <div class="comp-card" onclick="goComp(1)">
+        <div class="comp-card-img">🌟</div>
+        <div class="comp-card-body">
+          <div class="comp-card-tag">المسابقة الأولى</div>
+          <div class="comp-card-title">العلوم العامة</div>
+          <div class="comp-card-desc">اختبر معلوماتك في الفيزياء والكيمياء وعلوم الفضاء مع نموذجين متنوعين.</div>
+          <div class="comp-card-meta">
+            <span class="comp-meta-item">📄 نموذجان</span>
+            <span class="comp-meta-item">❓ 4 أسئلة</span>
+            <span class="comp-meta-item">⚡ متوسط</span>
+          </div>
+          <button class="comp-card-btn">ابدأ المسابقة ←</button>
+        </div>
+      </div>
+      <div class="comp-card" onclick="goComp(2)">
+        <div class="comp-card-img">🎯</div>
+        <div class="comp-card-body">
+          <div class="comp-card-tag">المسابقة الثانية</div>
+          <div class="comp-card-title">الثقافة واللغة</div>
+          <div class="comp-card-desc">اختبر معلوماتك في الأدب والتاريخ والجغرافيا واللغة العربية وآدابها.</div>
+          <div class="comp-card-meta">
+            <span class="comp-meta-item">📄 نموذجان</span>
+            <span class="comp-meta-item">❓ 4 أسئلة</span>
+            <span class="comp-meta-item">🔥 متقدم</span>
+          </div>
+          <button class="comp-card-btn">ابدأ المسابقة ←</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- PAGE: COMPETITION -->
+<div class="page" id="page-comp">
+  <div class="page-hero">
+    <h2 id="comp-title">—</h2>
+    <p id="comp-sub">اختر النموذج الذي تريد وابدأ الإجابة</p>
+  </div>
+  <main>
+    <div class="section-label">
+      <h2>النماذج المتاحة</h2>
+      <div class="line"></div>
+      <div class="badge">2 نماذج</div>
+    </div>
+    <div class="forms-grid">
+      <div class="form-card" onclick="goForm(1)">
+        <div class="form-card-top">
+          <div class="form-num-big">أ</div>
+          <h3>النموذج الأول</h3>
+          <p>اضغط للدخول وبدء الإجابة</p>
+        </div>
+        <div class="form-card-body">
+          <div class="form-card-info">
+            <div class="form-info-row"><span class="form-info-label">عدد الأسئلة</span><span class="form-info-val">سؤالان</span></div>
+            <div class="form-info-row"><span class="form-info-label">نوع الأسئلة</span><span class="form-info-val">اختيار متعدد</span></div>
+            <div class="form-info-row"><span class="form-info-label">الحالة</span><span class="form-info-val" style="color:var(--green);">متاح ✓</span></div>
+          </div>
+          <button class="form-start-btn">▶ ابدأ النموذج الأول</button>
+        </div>
+      </div>
+      <div class="form-card" onclick="goForm(2)">
+        <div class="form-card-top">
+          <div class="form-num-big">ب</div>
+          <h3>النموذج الثاني</h3>
+          <p>اضغط للدخول وبدء الإجابة</p>
+        </div>
+        <div class="form-card-body">
+          <div class="form-card-info">
+            <div class="form-info-row"><span class="form-info-label">عدد الأسئلة</span><span class="form-info-val">سؤالان</span></div>
+            <div class="form-info-row"><span class="form-info-label">نوع الأسئلة</span><span class="form-info-val">اختيار متعدد</span></div>
+            <div class="form-info-row"><span class="form-info-label">الحالة</span><span class="form-info-val" style="color:var(--green);">متاح ✓</span></div>
+          </div>
+          <button class="form-start-btn">▶ ابدأ النموذج الثاني</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- PAGE: QUIZ -->
+<div class="page" id="page-quiz">
+  <div class="quiz-container">
+    <div class="quiz-header">
+      <div class="quiz-icon" id="quiz-icon">📝</div>
+      <div class="quiz-info">
+        <h3 id="quiz-title">—</h3>
+        <p id="quiz-sub">—</p>
+      </div>
+      <div class="quiz-progress-wrap">
+        <div class="quiz-prog-text" id="quiz-prog-text">0 / 2</div>
+        <div class="quiz-prog-bg"><div class="quiz-prog-bar" id="quiz-prog-bar"></div></div>
+      </div>
+    </div>
+    <div id="questions-container"></div>
+    <div class="quiz-actions">
+      <button class="btn-primary" id="btn-check" onclick="checkAnswers()">✓ تحقق من الإجابات</button>
+      <button class="btn-secondary" onclick="resetQuiz()">↺ إعادة</button>
+      <button class="btn-secondary" onclick="goComp(currentComp)" style="margin-right:auto;">← النماذج</button>
+    </div>
+    <div class="result-box" id="result-box">
+      <div class="result-emoji" id="r-emoji">🎉</div>
+      <div class="result-title" id="r-title">—</div>
+      <div class="result-score" id="r-score">—</div>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <button class="btn-gold" onclick="resetQuiz()">↺ حاول مجدداً</button>
+        <button class="btn-secondary" onclick="goHome()">🏠 الرئيسية</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="#">سياسة الخصوصية</a>
+      <a href="#">شروط الاستخدام</a>
+      <a href="#">تواصل معنا</a>
+      <a href="#">المساعدة</a>
+    </div>
+    <div class="footer-logo">
+      <div class="footer-logo-icon">🏆</div>
+      <div class="footer-copy">© 2025 منصة المسابقات — جميع الحقوق محفوظة</div>
+    </div>
+    <div class="footer-info">
+      <span>الإصدار 2.0</span>
+      <span>دعم كامل للعربية</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const LETTERS = ['أ','ب','ج','د'];
+
+const DATA = {
+  1: {
+    title: '🌟 مسابقة العلوم العامة',
+    icon: '🌟',
+    forms: {
+      1: {
+        label: 'النموذج الأول — العلوم العامة',
+        sub: 'العلوم العامة • نموذج أ',
+        questions: [
+          { text: 'ما هو أكبر كوكب في المجموعة الشمسية؟', options: ['كوكب المشتري','كوكب زحل','كوكب الأرض'] },
+          { text: 'ما هو العنصر الكيميائي الأكثر وفرةً في الغلاف الجوي للأرض؟', options: ['النيتروجين','الأكسجين','ثاني أكسيد الكربون'] }
+        ]
+      },
+      2: {
+        label: 'النموذج الثاني — العلوم العامة',
+        sub: 'العلوم العامة • نموذج ب',
+        questions: [
+          { text: 'كم تبلغ سرعة الضوء تقريباً في الفراغ؟', options: ['300,000 كم/ثانية','150,000 كم/ثانية','500,000 كم/ثانية'] },
+          { text: 'ما هو الرمز الكيميائي للذهب؟', options: ['Au','Ag','Fe'] }
+        ]
+      }
+    }
+  },
+  2: {
+    title: '🎯 مسابقة الثقافة واللغة',
+    icon: '🎯',
+    forms: {
+      1: {
+        label: 'النموذج الأول — الثقافة واللغة',
+        sub: 'الثقافة واللغة • نموذج أ',
+        questions: [
+          { text: 'من هو مؤلف رواية «ألف شمس مشرقة»؟', options: ['خالد الحسيني','غابرييل غارسيا ماركيز','نجيب محفوظ'] },
+          { text: 'ما هي اللغة الأكثر تحدثاً في العالم من حيث عدد الناطقين بها لغةً أمٍّ؟', options: ['اللغة الصينية (الماندرين)','اللغة الإنجليزية','اللغة الإسبانية'] }
+        ]
+      },
+      2: {
+        label: 'النموذج الثاني — الثقافة واللغة',
+        sub: 'الثقافة واللغة • نموذج ب',
+        questions: [
+          { text: 'في أيِّ عام تأسست منظمة الأمم المتحدة؟', options: ['عام 1945','عام 1919','عام 1952'] },
+          { text: 'ما هو أطول نهر في العالم؟', options: ['نهر النيل','نهر الأمازون','نهر المسيسيبي'] }
+        ]
+      }
+    }
+  }
+};
+
+let currentComp = null;
+let currentForm = null;
+let selections  = {};
+let checked     = false;
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateBC() {
+  const bc = document.getElementById('breadcrumb');
+  let html = `<span class="bc-item" onclick="goHome()">🏠 الرئيسية</span>`;
+  if (currentComp) {
+    const comp = DATA[currentComp];
+    html += `<span class="bc-sep">›</span>`;
+    if (currentForm) {
+      html += `<span class="bc-item" onclick="goComp(${currentComp})">${comp.icon} ${comp.title.replace(comp.icon+' ','')}</span>`;
+      html += `<span class="bc-sep">›</span>`;
+      html += `<span class="bc-item active">النموذج ${currentForm===1?'الأول':'الثاني'}</span>`;
+    } else {
+      html += `<span class="bc-item active">${comp.title}</span>`;
+    }
+  }
+  bc.innerHTML = html;
+}
+
+function goHome() {
+  currentComp=null; currentForm=null; updateBC(); showPage('home');
+}
+
+function goComp(id) {
+  currentComp=id; currentForm=null;
+  const comp = DATA[id];
+  document.getElementById('comp-title').textContent = comp.title;
+  updateBC(); showPage('comp');
+}
+
+function goForm(fid) {
+  currentForm = fid;
+  selections  = {};
+  checked     = false;
+  const comp  = DATA[currentComp];
+  const form  = comp.forms[fid];
+  document.getElementById('quiz-icon').textContent  = comp.icon;
+  document.getElementById('quiz-title').textContent = form.label;
+  document.getElementById('quiz-sub').textContent   = form.sub;
+  renderQuestions(form.questions);
+  updateProgress();
+  document.getElementById('result-box').classList.remove('show');
+  document.getElementById('btn-check').disabled = false;
+  updateBC(); showPage('quiz');
+}
+
+function renderQuestions(qs) {
+  const c = document.getElementById('questions-container');
+  c.innerHTML = '';
+  qs.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = 'qcard-'+qi;
+    let opts = '';
+    q.options.forEach((o, oi) => {
+      opts += `<div class="option" id="opt-${qi}-${oi}" onclick="pick(${qi},${oi},${oi===0})">
+        <div class="opt-letter">${LETTERS[oi]}</div>
+        <div class="opt-label">${o}</div>
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+      </div>`;
+    });
+    card.innerHTML = `
+      <div class="question-top">
+        <div class="q-badge">س${qi+1}</div>
+        <div class="q-text-main">${q.text}</div>
+      </div>
+      <div class="options-list">${opts}</div>
+      <div class="q-feedback" id="qfb-${qi}"></div>`;
+    c.appendChild(card);
+  });
+}
+
+function pick(qi, oi, isCorrect) {
+  if (checked) return;
+  const form = DATA[currentComp].forms[currentForm];
+  const total = form.questions[qi].options.length;
+  for (let i=0; i<total; i++) document.getElementById('opt-'+qi+'-'+i).classList.remove('selected');
+  document.getElementById('opt-'+qi+'-'+oi).classList.add('selected');
+  selections[qi] = isCorrect;
+  document.getElementById('qcard-'+qi).classList.add('answered');
+  updateProgress();
+}
+
+function updateProgress() {
+  const total    = DATA[currentComp].forms[currentForm].questions.length;
+  const answered = Object.keys(selections).length;
+  document.getElementById('quiz-prog-text').textContent = answered+' / '+total;
+  document.getElementById('quiz-prog-bar').style.width  = ((answered/total)*100)+'%';
+}
+
+function checkAnswers() {
+  if (checked) return;
+  checked = true;
+  const form = DATA[currentComp].forms[currentForm];
+  let correct = 0;
+  form.questions.forEach((q, qi) => {
+    const total = q.options.length;
+    const fb    = document.getElementById('qfb-'+qi);
+    const isCor = selections[qi];
+    for (let oi=0; oi<total; oi++) {
+      const el = document.getElementById('opt-'+qi+'-'+oi);
+      if (oi===0) { el.classList.add('correct'); }
+      else if (el.classList.contains('selected')) { el.classList.add('wrong'); }
+      else { el.classList.add('dim'); }
+      el.classList.remove('selected');
+    }
+    if (isCor===true)  { correct++; fb.className='q-feedback ok show';  fb.textContent='✓ إجابة صحيحة! أحسنت.'; }
+    else if(isCor===false){ fb.className='q-feedback bad show'; fb.textContent='✗ إجابة خاطئة. الإجابة الصحيحة هي الخيار الأول.'; }
+    else { fb.className='q-feedback bad show'; fb.textContent='⚠ لم تختر إجابة. الإجابة الصحيحة هي الخيار الأول.'; }
+  });
+  const total = form.questions.length;
+  document.getElementById('quiz-prog-bar').style.width = '100%';
+  document.getElementById('quiz-prog-text').textContent = total+' / '+total;
+  document.getElementById('btn-check').disabled = true;
+  const pct = Math.round((correct/total)*100);
+  let emoji, title;
+  if (pct===100)     { emoji='🏆'; title='ممتاز! كل إجاباتك صحيحة!'; }
+  else if (pct>=50)  { emoji='👍'; title='جيد! يمكنك التحسن أكثر.'; }
+  else               { emoji='💪'; title='حاول مجدداً، ستنجح!'; }
+  document.getElementById('r-emoji').textContent = emoji;
+  document.getElementById('r-title').textContent = title;
+  document.getElementById('r-score').innerHTML = `نتيجتك: <span>${correct} / ${total}</span> (${pct}%)`;
+  const rb = document.getElementById('result-box');
+  rb.classList.add('show');
+  setTimeout(() => rb.scrollIntoView({behavior:'smooth',block:'center'}), 200);
+}
+
+function resetQuiz() { goForm(currentForm); }
+</script>
+</body>
+</html>
