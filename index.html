@@ -702,7 +702,7 @@ function renderCompetitions() {
     const comp = DATA[id];
     const card = document.createElement('div');
     card.className = 'comp-card';
-    card.onclick = () => goComp(id);
+    card.onclick = () => goComp(String(id));
     card.innerHTML = `
       <div class="comp-card-img">${comp.icon}</div>
       <div class="comp-card-body">
@@ -724,8 +724,8 @@ function goHome() {
 }
 
 function goComp(id) {
-  currentComp=id; currentForm=null;
-  const comp = DATA[id];
+  currentComp=String(id); currentForm=null;
+  const comp = DATA[String(id)];
   document.getElementById('comp-title').textContent = comp.title;
   document.getElementById('comp-sub').textContent = comp.desc;
   document.getElementById('forms-count').textContent = Object.keys(comp.forms).length + ' نماذج';
@@ -758,11 +758,11 @@ function goComp(id) {
 }
 
 function goForm(fid) {
-  currentForm = fid;
+  currentForm = String(fid);
   selections  = {};
   checked     = false;
   const comp  = DATA[currentComp];
-  const form  = comp.forms[fid];
+  const form  = comp.forms[String(fid)];
   document.getElementById('quiz-icon').textContent  = comp.icon;
   document.getElementById('quiz-title').textContent = form.label;
   document.getElementById('quiz-sub').textContent   = form.sub;
@@ -824,7 +824,7 @@ function renderQuestions(qs) {
 
 function pick(qi, oi, isCorrect) {
   if (checked) return;
-  const form = DATA[currentComp].forms[currentForm];
+  const form = DATA[currentComp].forms[String(currentForm)];
   const total = form.questions[qi].options.length;
   for (let i=0; i<total; i++) document.getElementById('opt-'+qi+'-'+i).classList.remove('selected');
   document.getElementById('opt-'+qi+'-'+oi).classList.add('selected');
@@ -834,7 +834,7 @@ function pick(qi, oi, isCorrect) {
 }
 
 function updateProgress() {
-  const total    = DATA[currentComp].forms[currentForm].questions.length;
+  const total    = DATA[currentComp].forms[String(currentForm)].questions.length;
   const answered = Object.keys(selections).length;
   document.getElementById('quiz-prog-text').textContent = answered+' / '+total;
   document.getElementById('quiz-prog-bar').style.width  = ((answered/total)*100)+'%';
@@ -844,7 +844,7 @@ function checkAnswers() {
   if (checked) return;
   checked = true;
   clearInterval(timerInterval);
-  const form = DATA[currentComp].forms[currentForm];
+  const form = DATA[currentComp].forms[String(currentForm)];
   let correct = 0;
   form.questions.forEach((q, qi) => {
     const total = q.options.length;
